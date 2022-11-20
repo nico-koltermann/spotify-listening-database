@@ -132,3 +132,4 @@ dmypy.json
 
 src/scripts/last-stamp.save
 src/scripts/history.txt
+src/database/spotify.db
