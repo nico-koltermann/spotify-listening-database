@@ -1,6 +1,8 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+from apscheduler.schedulers.blocking import BlockingScheduler
+
 import sqlite3
 
 import json
@@ -96,16 +98,24 @@ def create_task(conn, task):
     conn.commit()
     return cur.lastrowid
 
-if __name__ == '__main__':
+
+def fetch():
 
     # If something went wrong, write into new logfile
     try:
         fetch_data()
+        print("Fetch worked at " + str(datetime.datetime.now().strftime('%H:%M:%S')))
     except Exception as e:
         path_ws = os.path.dirname(os.path.abspath(__file__))
         f = open(path_ws + '/logs/' + str(datetime.datetime.now().strftime('%H:%M:%S')) +  '_error.log', 'w') 
         f.write(str(e))
         f.close()
 
+
+if __name__ == '__main__':
+
+    scheduler = BlockingScheduler()
+    scheduler.add_job(fetch, 'interval', minutes=20)
+    scheduler.start()
 
 

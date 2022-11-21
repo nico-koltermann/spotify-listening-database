@@ -5,7 +5,7 @@ import sqlite3
 
 api = Flask(__name__)
 
-@api.route('/history', methods=['GET'])
+@api.route('/api/history', methods=['GET'])
 def get_history():
 
     path_ws = os.path.dirname(os.path.abspath(__file__))
