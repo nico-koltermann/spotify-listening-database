@@ -1,5 +1,7 @@
 from flask import Flask, json
 import os
+import datetime
+import time
 
 import sqlite3
 
@@ -15,6 +17,22 @@ def get_history():
 
     return json.dumps(history)
 
+
+@api.route('/api/last_stamp', methods=['GET'])
+def get_last_stamp():
+
+    path_ws = os.path.dirname(os.path.abspath(__file__))
+    conn = create_connection(path_ws + '/../database/spotify.db')
+
+    sql = ''' SELECT MAX(history_stamp) FROM history; '''
+    cur = conn.cursor()
+    max_stamp = cur.execute(sql).fetchone()[0]
+
+    print(max_stamp)
+
+    return  str(datetime.datetime.utcfromtimestamp(max_stamp).strftime('%d.%m.%Y - %H:%M:%S'))
+
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -25,6 +43,7 @@ def create_connection(db_file):
     conn = sqlite3.connect(db_file)
 
     return conn
+
 
 def select_all_history(conn):
     """
@@ -38,6 +57,7 @@ def select_all_history(conn):
     rows = cur.fetchall()
 
     return rows
+
 
 if __name__ == '__main__':
     api.run()

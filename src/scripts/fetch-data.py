@@ -13,6 +13,8 @@ import time
 import datetime
 import dateutil.parser
 
+import db_actions as dba
+
 # Load env variables
 from dotenv import dotenv_values
 
@@ -33,14 +35,15 @@ def fetch_data():
     results = sp.current_user_recently_played(limit=50)
 
     # create a database connection
-    conn = create_connection(path_ws + '/../database/spotify.db')
+    conn = dba.create_connection(path_ws + '/../database/spotify.db')
     
-    stamp = get_last_timestamp(conn)
+    stamp = dba.get_last_timestamp(conn)
 
     # Revert order, so last is latest
     items = results['items']
     items = items[::-1]
 
+    print(items)
     for idx, item in enumerate(items):
 
         # Only take songs, older then last timestamp
@@ -58,46 +61,7 @@ def fetch_data():
                     track_json,
                     str(dateutil.parser.parse(item['played_at']).strftime('%s')))
 
-                create_task(conn, task)
-
-
-def create_connection(db_file):
-    """ create a database connection to the SQLite database
-        specified by db_file
-    :param db_file: database file
-    :return: Connection object or None
-    """
-    conn = None
-    conn = sqlite3.connect(db_file)
-
-    return conn
-
-def get_last_timestamp(conn):
-    """ Get latest timesstamp from db
-    :param db_file: database file
-    :return: Connection object or None
-    """
-
-    sql = ''' SELECT MAX(history_stamp) FROM history; '''
-    cur = conn.cursor()
-    max_stamp = cur.execute(sql).fetchone()[0]
-    return max_stamp
-    
-def create_task(conn, task):
-    """
-    Create a new task
-    :param conn:
-    :param task:
-    :return:
-    """
-
-    sql = ''' INSERT INTO history(artist, song, history_entry, history_stamp)
-              VALUES(?,?, ?, ?) '''
-    cur = conn.cursor()
-    cur.execute(sql, task)
-    conn.commit()
-    return cur.lastrowid
-
+                dba.create_task(conn, task)
 
 def fetch():
 
@@ -106,14 +70,15 @@ def fetch():
         fetch_data()
         print("Fetch worked at " + str(datetime.datetime.now().strftime('%H:%M:%S')))
     except Exception as e:
+        print(e)
         path_ws = os.path.dirname(os.path.abspath(__file__))
         f = open(path_ws + '/logs/' + str(datetime.datetime.now().strftime('%H:%M:%S')) +  '_error.log', 'w') 
         f.write(str(e))
         f.close()
 
-
 if __name__ == '__main__':
 
+    fetch()
     scheduler = BlockingScheduler()
     scheduler.add_job(fetch, 'interval', minutes=20)
     scheduler.start()
