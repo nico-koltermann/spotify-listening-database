@@ -21,9 +21,7 @@ from dotenv import dotenv_values
 def get_details(sp, song, artist):
 
     # Fetch last 50 played songs
-    result = sp.search(q='track:' + song + '%20' + 'artist:' + artist, type='track')
-
-    print(result)
+    result = sp.search(q=song + ' ' + artist,  limit=1, offset=0, type='track', market='DE')
 
     if len(result['tracks']['items']) == 0:
         return None
@@ -56,24 +54,21 @@ def load_data():
     for i in range(0, len(history)):
 
         # TODO: get detail data
-        # ret = get_details(sp, history[i]['trackName'], history[i]['artistName'])
-        # print(ret['album']['artists'][0]['name'])
-        # print(history[i]['trackName'])
+        ret = get_details(sp, history[i]['trackName'], history[i]['artistName'])
 
-        # podcast = ret['album']['artists']['name'] != history[i]['trackName']
+        is_song = ret['album']['artists'][0]['name'] in history[i]['artistName']
 
-        # track_json = json.dumps(ret)
+        track_json = json.dumps(ret)
 
         task = ( 
             history[i]['artistName'],
             history[i]['trackName'],
-            # track_json,
-            '',
+            track_json,
             str(dateutil.parser.parse(history[i]['endTime']).strftime('%s')),
             history[i]['msPlayed'])
 
-        if history[i]['msPlayed'] > 0: 
-            create_task(conn, task)
+        if history[i]['msPlayed'] > 0 and is_song: 
+            dba.create_task(conn, task)
 
         print(f'''{i} / {entries_count} Processed''')
     
