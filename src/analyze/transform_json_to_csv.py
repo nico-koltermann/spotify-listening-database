@@ -25,10 +25,7 @@ def json_to_csv():
     df = pd.DataFrame(all_data)
     df.to_csv( os.path.join(directory, 'full_history.csv') , index = None)
 
-    print(all_data[0])
-    print(len(all_data))
 
-    
 def load():
     # If something went wrong, write into new logfile
     try:

@@ -12,7 +12,7 @@ Then every X Minutes the script save all recent data without dublicates.
 
 ## Load Spotify Data
 
-1. You can request the listining history of the Spotify account at the official [account detail page](https://www.spotify.com/us/account/overview/). Then you get a e-mail with a history.json.
+1. You can request the listining history of the Spotify account at the official [account detail page](https://www.spotify.com/us/account/overview/). Then you get a e-mail with a history.json. __Important: Only for the normal history__ (For extended, the script should be adjusted)
 
 2. Adjust path in the script for your data.json
 
