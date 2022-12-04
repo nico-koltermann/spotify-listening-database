@@ -7,34 +7,30 @@ Transform Spotify data and write it into database.
 
 Use a simple Flask server as sample-backend, for running it with [front-end](https://github.com/nico-koltermann/spotify-trends) foe evaluation of account listing trends.
 
-# Scripts
+__Problem:__
 
-## Fetch-data
+The recently-tracks are not really accurate and also don't give the same data as the normal spotify history ([Link](https://developer.spotify.com/console/get-recently-played/)).
 
-1. Create Spotify Dashboard in developer page
 
-2. Fill the data in the .env for authorize your Spotify. 
 
-3. Run the script on your PC or single-board computer (Raspberry Pi) for gathering the data over time.
+## Changelog 03.12.2022
 
-Then every X Minutes the script save all recent data without dublicates.
+First idea of this repository, was a script, that fetch the data of recent history, write it into a database. Then a server 
+can provide this data for a visualization at a frontend.
+No further work on the backend, because of lack of information and accuracy of the recently updated, provided by the api.
 
-## Load Spotify Data
+Mor information [here](docs/backend.md).
+## Install environment
 
-1. You can request the listining history of the Spotify account at the official [account detail page](https://www.spotify.com/us/account/overview/). Then you get a e-mail with a history.json.
+Install via pip with requirement.txt
 
-2. Adjust path in the script for your data.json
+```bash
+sudo apt install pip
+pip install -r requirements.txt
+```
 
-3. By executing the script, it will write the old Spotify data into the database, remove podcast data and add the additional info, by request the data via Spotify api (Therefore the script need some time, if you want to avoid this, just don't use the additional data)
+Install via conda:
 
-## DB-Actions
-
-- Executing the script, creates a new SQLite database
-
-- This file includes all db interactions
-
-__Important__ This is only a local test backend, not supposed for public running, there is no security for sql injections of similar!
-
-## Server 
-
-1. Runs a simple Flask server backend for getting data by api call.
+```bash
+conda env create -f environment.yaml
+```
