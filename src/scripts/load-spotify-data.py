@@ -53,7 +53,6 @@ def load_data():
 
     for i in range(0, len(history)):
 
-        # TODO: get detail data
         ret = get_details(sp, history[i]['trackName'], history[i]['artistName'])
 
         is_song = ret['album']['artists'][0]['name'] in history[i]['artistName']
