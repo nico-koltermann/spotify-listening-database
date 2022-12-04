@@ -138,3 +138,5 @@ src/database/spotify.db
 
 src/data
 
+*.db
+
