@@ -1,0 +1,13 @@
+
+name: spotify-webapp
+dependencies:
+  - python=3.8
+  - numpy
+  - pandas
+  - python-dotenv
+  - path
+  - apscheduler
+  - pip
+  - pip:
+    - spotipy
+    - config

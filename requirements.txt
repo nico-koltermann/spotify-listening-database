@@ -3,3 +3,4 @@ spotipy
 path
 config
 apscheduler
+pandas
