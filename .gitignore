@@ -128,15 +128,17 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+
+
+
+# Customs:
+
 .env
 
 src/scripts/last-stamp.save
 src/scripts/history.txt
 src/database/spotify.db
-
-
-
+src/analyze/summary.txt
 src/data
 
 *.db
-
